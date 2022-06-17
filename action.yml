@@ -15,7 +15,8 @@ runs:
       run: |
         curl https://dlcdn.apache.org/maven/maven-3/${{ inputs.version }}/binaries/apache-maven-${{ inputs.version }}-bin.tar.gz -O
         tar -zxf apache-maven-${{ inputs.version }}-bin.tar.gz
-        sudo ln -s ${{ github.workspace }}/apache-maven-${{ inputs.version }}/bin/mvn /bin/mvn
+        # sudo ln -s ${{ github.workspace }}/apache-maven-${{ inputs.version }}/bin/mvn /bin/mvn
+        echo "${{ github.workspace }}/apache-maven-${{ inputs.version }}/bin" >> $GITHUB_PATH
         chmod a+x -R ${{ github.workspace }}/apache-maven-${{ inputs.version }}
       shell: bash
     - name: Executing the build
