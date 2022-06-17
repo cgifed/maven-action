@@ -1,0 +1,26 @@
+name: 'This is a sample Maven Action'
+description: 'This is my first maven action'
+inputs:
+  version:
+    description: 'Provide the maven version eg: 3.3.9'
+    required: true
+    default: '3.8.6'
+  maven_lc:
+    description: 'Maven Life Cycle options'
+    default: 'clean package'
+runs:
+  using: "composite"
+  steps:
+    - name: Downloaing maven binaries
+      run: |
+        curl https://dlcdn.apache.org/maven/maven-3/${{ inputs.version }}/binaries/apache-maven-${{ inputs.version }}-bin.tar.gz -O
+        tar -zxf apache-maven-${{ inputs.version }}-bin.tar.gz
+        sudo ln -s ${{ env.GITHUB_WORKSPACE }}/apache-maven-${{ inputs.version }}/bin/mvn /bin/mvn
+        chmod a+x -R ${{ env.GITHUB_WORKSPACE }}/apache-maven-${{ inputs.version }}
+      shell: bash
+    - name: Executing the build
+      run: |
+        mvn --version
+        export M2_HOME=${{ env.GITHUB_WORKSPACE }}/apache-maven-${{ inputs.version }}
+        mvn ${{ inputs.maven_lc }}
+      shell: bash
